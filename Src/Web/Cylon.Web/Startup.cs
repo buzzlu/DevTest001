@@ -1,4 +1,5 @@
 ﻿using Cylon.Core.Data;
+using Cylon.Core.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,6 +34,7 @@ namespace Cylon.Web
 
             var connectionString = Configuration.GetConnectionString("Default");
             services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationContext>(options => options.UseNpgsql(connectionString));
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,9 +56,12 @@ namespace Cylon.Web
 
             app.UseMvc(routes =>
             {
+                //routes.MapRoute(
+                //    name: "default",
+                //    template: "{controller=Home}/{action=Index}/{id?}");
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    name: "author",
+                    template: "{controller=Author}/{action=Index}/{id?}");
             });
         }
     }
